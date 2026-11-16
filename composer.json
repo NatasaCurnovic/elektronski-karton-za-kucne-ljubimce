@@ -1,0 +1,19 @@
+{
+    "name": "natasa/elektronski-karton-za-kucne-ljubimce",
+    "description": "Elektronski karton za kucne ljubimce",
+    "autoload": {
+        "psr-4": {
+            "Natasa\\ElektronskiKartonZaKucneLjubimce\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Natasa Curnovic"
+        }
+    ],
+    "require": {
+        "phpmailer/phpmailer": "^7.2",
+        "fakerphp/faker": "^1.24",
+        "endroid/qr-code": "^4.8"
+    }
+}
