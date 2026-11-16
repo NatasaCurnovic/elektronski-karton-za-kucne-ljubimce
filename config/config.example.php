@@ -16,4 +16,8 @@ return [
         'from'      => 'noreply@ljubimci.test',
         'from_name' => 'Elektronski karton ljubimaca',
     ],
+
+    'app' => [
+        'base_url' => 'http://localhost:8080/ljubimci',
+    ],
 ];
