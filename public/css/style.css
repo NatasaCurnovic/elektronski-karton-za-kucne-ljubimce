@@ -1,0 +1,45 @@
+:root {
+    --plava: #2B9ED7;
+    --roze: #EA1C74;
+    --svetlo-plava: #68C7F3;
+    --pozadina: #FAFBFF;
+    --tamno-plava: #0B5A94;
+}
+
+body {
+    background-color: var(--pozadina);
+    font-family: 'Inter', sans-serif;
+    color: #1F2937;
+}
+
+.btn-primary {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: var(--roze);
+    --bs-btn-border-color: var(--roze);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #c8165f;
+    --bs-btn-hover-border-color: #c8165f;
+    --bs-btn-active-bg: #b0134f;
+    --bs-btn-active-border-color: #b0134f;
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--plava);
+    --bs-btn-border-color: var(--plava);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: var(--plava);
+    --bs-btn-hover-border-color: var(--plava);
+    --bs-btn-active-bg: var(--plava);
+    --bs-btn-active-border-color: var(--plava);
+}
+
+.navbar-brand img {
+    height: 40px;
+}
+
+.logo-tekst {
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--tamno-plava);
+}
