@@ -3,9 +3,10 @@
     "description": "Elektronski karton za kucne ljubimce",
     "autoload": {
         "psr-4": {
-            "Natasa\\ElektronskiKartonZaKucneLjubimce\\": "src/"
+            "App\\": "src/"
         }
     },
+
     "authors": [
         {
             "name": "Natasa Curnovic"
