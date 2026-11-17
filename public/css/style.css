@@ -172,6 +172,83 @@ body {
     color: var(--plava);
 }
 
+/* Stranice vlasnika */
+.owner-wrap {
+    min-height: 70vh;
+}
+.owner-meni {
+    background: var(--tamno-plava);
+}
+.owner-meni a,
+.owner-meni form button {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: 100%;
+    padding: 0.65rem 1.1rem;
+    color: #fff;
+    text-decoration: none;
+    background: none;
+    border: 0;
+    text-align: left;
+    font-size: 0.9rem;
+}
+.owner-meni a:hover,
+.owner-meni form button:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+.owner-meni a.aktivan {
+    background: var(--svetlo-plava);
+}
+.owner-meni a.onemoguceno {
+    opacity: 0.45;
+    pointer-events: none;
+}
+
+.pet-kartica {
+    background: #fff;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    height: 100%;
+}
+.pet-slika {
+    aspect-ratio: 1 / 1;
+    background: #e8f4fb;
+    color: var(--plava);
+    font-size: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.4rem;
+}
+.dodaj-kartica {
+    border: 2px dashed var(--plava);
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: var(--plava);
+    min-height: 220px;
+}
+.dodaj-kartica i {
+    font-size: 2.5rem;
+}
+
+.termin {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    background: #e8f4fb;
+    border-radius: 0.5rem;
+    padding: 0.9rem 1.1rem;
+    margin-bottom: 0.7rem;
+}
+
 @media (max-width: 767px) {
     .hero {
         aspect-ratio: auto;
