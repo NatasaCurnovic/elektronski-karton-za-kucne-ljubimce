@@ -37,6 +37,7 @@ if (form) {
             proveri('sex', v('sex') !== '');
             const d = v('birth_date');
             proveri('birth_date', d === '' || new Date(d) <= new Date());
+            if (!proveriSliku(form.querySelector('#photo'))) ok = false;
         },
         3: function () {
             const izabran = form.querySelector('input[name="veterinarian_id"]:checked');

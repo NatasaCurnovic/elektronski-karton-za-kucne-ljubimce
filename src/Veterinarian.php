@@ -22,4 +22,17 @@ class Veterinarian
         $stmt->execute([$id]);
         return (bool) $stmt->fetchColumn();
     }
+
+    public static function find(int $id): ?array
+    {
+        $stmt = Database::getConnection()->prepare(
+            'SELECT u.first_name, u.last_name, s.name AS station, s.city, s.phone
+             FROM users u
+             JOIN veterinarian_profiles vp ON vp.user_id = u.id
+             JOIN veterinary_stations s ON s.id = vp.veterinary_station_id
+             WHERE u.id = ?'
+        );
+        $stmt->execute([$id]);
+        return $stmt->fetch() ?: null;
+    }
 }

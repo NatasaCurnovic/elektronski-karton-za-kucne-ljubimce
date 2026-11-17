@@ -1,10 +1,11 @@
 <?php
 require __DIR__ . '/../vendor/autoload.php';
 
-use App\User;
-use App\Veterinarian;
+use App\ImageUpload;
 use App\Mailer;
 use App\Notification;
+use App\User;
+use App\Veterinarian;
 
 session_start();
 if (empty($_SESSION['csrf'])) {
@@ -16,10 +17,10 @@ function e(string $s): string
     return htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
 }
 
-$errors  = [];
-$success = false;
+$errors   = [];
+$success  = false;
 $mailSent = false;
-$step    = 1;
+$step     = 1;
 $old = [
         'first_name' => '', 'last_name' => '', 'email' => '', 'phone' => '', 'address' => '',
         'pet_name' => '', 'species' => '', 'breed' => '', 'sex' => '', 'birth_date' => '',
@@ -81,12 +82,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors['birth_date'] = 'Unesite ispravan datum rođenja.';
         }
     }
+    $greskaSlike = ImageUpload::check($_FILES['photo'] ?? []);
+    if ($greskaSlike) {
+        $errors['photo'] = $greskaSlike;
+    }
 
     // Korak 3: veterinar
     $vetId = (int) $old['veterinarian_id'];
     if ($vetId === 0 || !Veterinarian::exists($vetId)) {
         $errors['veterinarian_id'] = 'Izaberite veterinara.';
     }
+
+    // Slika se snima tek kad je sve ostalo ispravno
+    $photo = null;
+    if (!$errors && ($_FILES['photo']['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_OK) {
+        try {
+            $photo = ImageUpload::savePet($_FILES['photo']);
+        } catch (RuntimeException $ex) {
+            $errors['photo'] = $ex->getMessage();
+        }
+    }
+    $old['photo'] = $photo;
 
     if (!$errors) {
         try {
@@ -104,6 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             Notification::log($res['owner_id'], 'ACCOUNT_ACTIVATION', $subject, $mailSent ? 'SENT' : 'FAILED');
             $success = true;
         } catch (PDOException $ex) {
+            ImageUpload::delete($photo); // upis nije uspeo, ne ostavljaj sliku
             $errors['email'] = 'Nalog sa ovom e-mail adresom već postoji.';
         }
     }
@@ -111,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Na kom koraku da se prikaže prva greška
     if ($errors) {
         $k1 = ['first_name', 'last_name', 'email', 'phone', 'address', 'password', 'password_confirm'];
-        $k2 = ['pet_name', 'species', 'breed', 'sex', 'birth_date'];
+        $k2 = ['pet_name', 'species', 'breed', 'sex', 'birth_date', 'photo'];
         if (array_intersect(array_keys($errors), $k1)) {
             $step = 1;
         } elseif (array_intersect(array_keys($errors), $k2)) {
@@ -152,14 +169,14 @@ include __DIR__ . '/includes/header.php';
                     <?php endif; ?>
                 <?php else: ?>
 
-                    <!-- Indikator koraka -->
                     <div class="koraci mb-4">
                         <span class="korak-broj" data-ind="1">1</span><span class="korak-linija"></span>
                         <span class="korak-broj" data-ind="2">2</span><span class="korak-linija"></span>
                         <span class="korak-broj" data-ind="3">3</span>
                     </div>
 
-                    <form id="registerForm" method="post" action="register.php" data-start="<?= $step ?>" novalidate>
+                    <form id="registerForm" method="post" action="register.php" enctype="multipart/form-data"
+                          data-start="<?= $step ?>" novalidate>
                         <input type="hidden" name="csrf" value="<?= e($_SESSION['csrf']) ?>">
 
                         <!-- KORAK 1 -->
@@ -184,6 +201,21 @@ include __DIR__ . '/includes/header.php';
                         <div class="korak d-none" data-korak="2">
                             <h2 class="naslov">Dodajte svog ljubimca</h2>
                             <p class="small">Unesite osnovne podatke o svom ljubimcu.</p>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="photo">Slika ljubimca</label>
+                                <div class="d-flex gap-3 align-items-center">
+                                    <div id="photoPreview" class="pet-slika foto-prikaz"><i class="bi bi-camera"></i></div>
+                                    <div class="flex-grow-1">
+                                        <input type="file" class="form-control <?= isset($errors['photo']) ? 'is-invalid' : '' ?>"
+                                               id="photo" name="photo" accept="image/jpeg,image/png,image/webp"
+                                               data-preview="#photoPreview">
+                                        <div class="invalid-feedback"><?= e($errors['photo'] ?? 'JPG, PNG ili WebP, najviše 2 MB.') ?></div>
+                                        <div class="form-text">Nije obavezno. JPG, PNG ili WebP, najviše 2 MB.</div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <?php polje('pet_name', 'Ime ljubimca', $errors, $old, 'text', '', true); ?>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
@@ -251,7 +283,6 @@ include __DIR__ . '/includes/header.php';
                         </div>
                     </form>
 
-                    <!-- Prozor za potvrdu -->
                     <div class="modal fade" id="potvrdaModal" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content text-center p-3">
@@ -267,5 +298,6 @@ include __DIR__ . '/includes/header.php';
         </div>
     </div>
 
+    <script src="js/photo_preview.js"></script>
     <script src="js/register.js"></script>
 <?php include __DIR__ . '/includes/footer.php'; ?>

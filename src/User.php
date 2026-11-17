@@ -116,12 +116,13 @@ class User
             $ownerId = (int) $pdo->lastInsertId();
 
             $stmt = $pdo->prepare(
-                'INSERT INTO pets (owner_id, veterinarian_id, name, species, breed, sex, date_of_birth)
-                 VALUES (?, ?, ?, ?, ?, ?, ?)'
+                'INSERT INTO pets (owner_id, veterinarian_id, name, species, breed, sex, date_of_birth, profile_photo)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
             );
             $stmt->execute([
                 $ownerId, $vetId, $pet['pet_name'], $pet['species'],
                 $pet['breed'] ?: null, $pet['sex'], $pet['birth_date'] ?: null,
+                $pet['photo'] ?? null,
             ]);
 
             $pdo->commit();

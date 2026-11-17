@@ -249,6 +249,49 @@ body {
     margin-bottom: 0.7rem;
 }
 
+/* E-karton */
+.karton-zaglavlje {
+    display: flex;
+    gap: 1.2rem;
+    align-items: center;
+    background: #e8f4fb;
+    border-radius: 0.5rem;
+    padding: 1.2rem;
+}
+.karton-slika {
+    width: 110px;
+    flex-shrink: 0;
+}
+.zapis {
+    background: #fff;
+    border-left: 4px solid var(--roze);
+    border-radius: 0.4rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    padding: 0.9rem 1.1rem;
+    margin-bottom: 0.8rem;
+}
+.nav-tabs .nav-link {
+    color: var(--plava);
+}
+.nav-tabs .nav-link.active {
+    color: var(--tamno-plava);
+    font-weight: 600;
+}
+
+/* Slike ljubimaca */
+.pet-slika {
+    overflow: hidden;
+}
+.pet-slika img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.foto-prikaz {
+    width: 110px;
+    flex-shrink: 0;
+}
+
 @media (max-width: 767px) {
     .hero {
         aspect-ratio: auto;

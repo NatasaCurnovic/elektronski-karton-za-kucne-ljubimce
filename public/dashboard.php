@@ -29,22 +29,28 @@ include __DIR__ . '/includes/owner_start.php';
         <?php foreach ($ljubimci as $p): ?>
             <div class="col-sm-6 col-xl-4">
                 <div class="pet-kartica">
-                    <div class="pet-slika"><i class="bi bi-camera"></i></div>
+                    <div class="pet-slika">
+                        <?php if ($p['profile_photo']): ?>
+                            <img src="<?= e($p['profile_photo']) ?>" alt="<?= e($p['name']) ?>">
+                        <?php else: ?>
+                            <i class="bi bi-camera"></i>
+                        <?php endif; ?>
+                    </div>
                     <h6 class="mt-2 mb-0"><?= e($p['name']) ?></h6>
                     <small class="text-muted">
                         <?= e($p['species']) ?> · <?= e($pol[$p['sex']] ?? '') ?>
                         <?= $p['breed'] ? ' · ' . e($p['breed']) : '' ?>
                     </small>
-                    <a class="btn btn-primary btn-sm w-100 mt-2 disabled" href="#">Pogledaj karton</a>
+                    <a class="btn btn-primary btn-sm w-100 mt-2" href="e_karton.php?id=<?= (int) $p['id'] ?>">Pogledaj karton</a>
                 </div>
             </div>
         <?php endforeach; ?>
 
         <div class="col-sm-6 col-xl-4">
-            <div class="pet-kartica dodaj-kartica">
+            <a href="ljubimac.php" class="pet-kartica dodaj-kartica text-decoration-none">
                 <i class="bi bi-plus-square"></i>
                 <span>Dodaj ljubimca</span>
-            </div>
+            </a>
         </div>
     </div>
 
