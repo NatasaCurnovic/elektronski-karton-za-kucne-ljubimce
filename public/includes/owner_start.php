@@ -2,7 +2,8 @@
 $stavke = [
     'pregled'     => ['Pregled',            'bi-grid',                'dashboard.php'],
     'obavestenja' => ['Obaveštenja',        'bi-bell',                null],
-    'zakazivanje' => ['Zakazivanje termina', 'bi-calendar-plus',      null],
+    'zakazivanje' => ['Zakazivanje termina', 'bi-calendar-plus',      'zakazivanje.php'],
+    'termini'     => ['Moji termini', 'bi-calendar-check', 'moji_termini.php'],
     'karton'      => ['E-karton',           'bi-file-earmark-medical', 'e_karton.php'],
     'ljubimci'    => ['Ljubimci',           'bi-heart',               'ljubimci.php'],
     'kalendar'    => ['Kalendar',           'bi-calendar3',           null],

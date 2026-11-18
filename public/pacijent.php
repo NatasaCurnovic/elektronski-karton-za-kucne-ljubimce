@@ -26,6 +26,9 @@ include __DIR__ . '/includes/vet_start.php';
     <a href="pacijenti.php" class="small"><i class="bi bi-arrow-left"></i> Nazad na pacijente</a>
 
     <div class="karton-zaglavlje mt-2">
+        <?php if (isset($_GET['ok'])): ?>
+            <div class="alert alert-success py-2 mt-2">Zapis je sačuvan.</div>
+        <?php endif; ?>
         <div class="pet-slika karton-slika">
             <?php if ($pet['profile_photo']): ?>
                 <img src="<?= e($pet['profile_photo']) ?>" alt="<?= e($pet['name']) ?>">
@@ -70,6 +73,9 @@ include __DIR__ . '/includes/vet_start.php';
 
     <div class="tab-content pt-3">
         <div class="tab-pane fade show active" id="tabPregledi">
+            <a href="pregled_forma.php?pet=<?= (int) $pet['id'] ?>" class="btn btn-primary btn-sm mb-3">
+                <i class="bi bi-plus-lg"></i> Dodaj pregled
+            </a>
             <?php if (!$pregledi): ?>
                 <p class="text-muted">Još nema evidentiranih pregleda.</p>
             <?php endif; ?>
@@ -80,6 +86,10 @@ include __DIR__ . '/includes/vet_start.php';
                         <span class="text-muted small"><?= datum($r['examination_date'], true) ?></span>
                     </div>
                     <div class="small text-muted mb-1">Dr <?= e($r['first_name'] . ' ' . $r['last_name']) ?></div>
+                    <?php if ((int) $r['veterinarian_id'] === (int) $user['id']): ?>
+                        <a href="pregled_forma.php?pet=<?= (int) $pet['id'] ?>&id=<?= (int) $r['id'] ?>"
+                           class="btn btn-outline-primary btn-sm mb-2">Izmeni</a>
+                    <?php endif; ?>
                     <?php if ($r['findings']): ?>
                         <div><strong>Nalaz:</strong> <?= nl2br(e($r['findings'])) ?></div>
                     <?php endif; ?>
@@ -91,6 +101,9 @@ include __DIR__ . '/includes/vet_start.php';
         </div>
 
         <div class="tab-pane fade" id="tabTretmani">
+            <a href="tretman_forma.php?pet=<?= (int) $pet['id'] ?>" class="btn btn-primary btn-sm mb-3">
+                <i class="bi bi-plus-lg"></i> Dodaj tretman
+            </a>
             <?php if (!$tretmani): ?>
                 <p class="text-muted">Još nema evidentiranih tretmana.</p>
             <?php endif; ?>
@@ -101,6 +114,10 @@ include __DIR__ . '/includes/vet_start.php';
                         <span class="text-muted small"><?= datum($r['treatment_date']) ?></span>
                     </div>
                     <div class="small text-muted mb-1">Dr <?= e($r['first_name'] . ' ' . $r['last_name']) ?></div>
+                    <?php if ((int) $r['veterinarian_id'] === (int) $user['id']): ?>
+                        <a href="tretman_forma.php?pet=<?= (int) $pet['id'] ?>&id=<?= (int) $r['id'] ?>"
+                           class="btn btn-outline-primary btn-sm mb-2">Izmeni</a>
+                    <?php endif; ?>
                     <div><?= nl2br(e($r['description'])) ?></div>
                     <?php if ($r['notes']): ?>
                         <div><strong>Napomena:</strong> <?= nl2br(e($r['notes'])) ?></div>
@@ -111,6 +128,16 @@ include __DIR__ . '/includes/vet_start.php';
     </div>
 
 <?php
+
+?>
+
+<!--Da se posle čuvanja tretmana otvori baš kartica Tretmani-->
+<script>
+if (location.hash === '#tretmani') {
+    bootstrap.Tab.getOrCreateInstance(document.querySelector('[data-bs-target="#tabTretmani"]')).show();
+}
+</script>
+
 include __DIR__ . '/includes/vet_end.php';
 include __DIR__ . '/includes/footer.php';
 ?>

@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('Europe/Belgrade');
 function e(string $s): string
 {
     return htmlspecialchars($s, ENT_QUOTES, 'UTF-8');

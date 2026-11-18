@@ -2,7 +2,7 @@
 $stavke = [
     'pregled'   => ['Pregled',   'bi-grid',     'vet.php'],
     'pacijenti' => ['Pacijenti', 'bi-heart',    'pacijenti.php'],
-    'termini'   => ['Termini',   'bi-calendar3', null],
+    'termini'   => ['Termini',   'bi-calendar3', 'termini.php'],
     'profil'    => ['Profil',    'bi-person',   null],
 ];
 ?>
