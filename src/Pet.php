@@ -82,4 +82,35 @@ class Pet
         );
         $stmt->execute([$id, $ownerId]);
     }
+
+    // Svi pacijenti jednog veterinara, opciono pretraga po imenu
+    public static function forVet(int $vetId, string $q = ''): array
+    {
+        $stmt = Database::getConnection()->prepare(
+            'SELECT p.id, p.name, p.species, p.breed, p.sex, p.profile_photo,
+                    u.first_name AS owner_first, u.last_name AS owner_last,
+                    (SELECT MAX(e.examination_date) FROM examinations e WHERE e.pet_id = p.id) AS last_exam
+             FROM pets p
+             JOIN users u ON u.id = p.owner_id
+             WHERE p.veterinarian_id = :vet AND p.is_active = 1
+               AND (:q1 = "" OR p.name LIKE :q2)
+             ORDER BY p.name'
+        );
+        $stmt->execute([':vet' => $vetId, ':q1' => $q, ':q2' => '%' . $q . '%']);
+        return $stmt->fetchAll();
+    }
+
+    // Vraća ljubimca samo ako je dodeljen tom veterinaru (provera na serveru)
+    public static function findForVet(int $id, int $vetId): ?array
+    {
+        $stmt = Database::getConnection()->prepare(
+            'SELECT p.*, u.first_name AS owner_first, u.last_name AS owner_last,
+                    u.email AS owner_email, u.phone AS owner_phone, u.address AS owner_address
+             FROM pets p
+             JOIN users u ON u.id = p.owner_id
+             WHERE p.id = ? AND p.veterinarian_id = ? AND p.is_active = 1'
+        );
+        $stmt->execute([$id, $vetId]);
+        return $stmt->fetch() ?: null;
+    }
 }

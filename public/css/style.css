@@ -292,6 +292,40 @@ body {
     flex-shrink: 0;
 }
 
+/* Panel veterinara */
+.statistika {
+    background: #fff;
+    border-left: 4px solid var(--plava);
+    border-radius: 0.4rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    padding: 1rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+}
+.statistika .broj {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--tamno-plava);
+    line-height: 1.1;
+}
+.mala-slika {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #e8f4fb;
+    color: var(--plava);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    vertical-align: middle;
+}
+.mala-slika img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 @media (max-width: 767px) {
     .hero {
         aspect-ratio: auto;
