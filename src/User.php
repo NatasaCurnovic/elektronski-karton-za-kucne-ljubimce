@@ -133,4 +133,72 @@ class User
 
         return ['owner_id' => $ownerId, 'token' => $token];
     }
+
+    public static function profile(int $id): ?array
+    {
+        $stmt = Database::getConnection()->prepare(
+            'SELECT first_name, last_name, email, phone, address FROM users WHERE id = ?'
+        );
+        $stmt->execute([$id]);
+        return $stmt->fetch() ?: null;
+    }
+
+    public static function updateProfile(int $id, string $ime, string $prezime, ?string $telefon, ?string $adresa): void
+    {
+        Database::getConnection()->prepare(
+            'UPDATE users SET first_name = ?, last_name = ?, phone = ?, address = ? WHERE id = ?'
+        )->execute([$ime, $prezime, $telefon, $adresa, $id]);
+    }
+
+    // Menja lozinku samo ako je stara tačna. Vraća true ako je promenjena.
+    public static function changePassword(int $id, string $stara, string $nova): bool
+    {
+        $pdo  = Database::getConnection();
+        $stmt = $pdo->prepare('SELECT password_hash FROM users WHERE id = ?');
+        $stmt->execute([$id]);
+        $hash = $stmt->fetchColumn();
+
+        if (!$hash || !password_verify($stara, $hash)) {
+            return false;
+        }
+        $pdo->prepare('UPDATE users SET password_hash = ? WHERE id = ?')
+            ->execute([password_hash($nova, PASSWORD_DEFAULT), $id]);
+        return true;
+    }
+
+    // Administrator pravi veterinara. Lozinku niko ne zna, veterinar je postavlja preko linka (važi 48 sati).
+    public static function createVeterinarian(array $u, int $stationId, ?string $licenca, ?string $specijalizacija): array
+    {
+        $pdo     = Database::getConnection();
+        $token   = bin2hex(random_bytes(32));
+        $expires = date('Y-m-d H:i:s', time() + 48 * 3600);
+
+        $pdo->beginTransaction();
+        try {
+            $pdo->prepare(
+                'INSERT INTO users
+                 (first_name, last_name, email, password_hash, phone, role,
+                  is_active, is_email_verified, reset_token, reset_expires_at)
+                 VALUES (?, ?, ?, ?, ?, "VETERINARIAN", 1, 1, ?, ?)'
+            )->execute([
+                $u['first_name'], $u['last_name'], $u['email'],
+                password_hash(bin2hex(random_bytes(16)), PASSWORD_BCRYPT),
+                $u['phone'] ?: null,
+                $token, $expires,
+            ]);
+            $id = (int) $pdo->lastInsertId();
+
+            $pdo->prepare(
+                'INSERT INTO veterinarian_profiles (user_id, veterinary_station_id, license_number, specialization)
+                 VALUES (?, ?, ?, ?)'
+            )->execute([$id, $stationId, $licenca, $specijalizacija]);
+
+            $pdo->commit();
+        } catch (\Throwable $e) {
+            $pdo->rollBack();
+            throw $e;
+        }
+
+        return ['id' => $id, 'token' => $token];
+    }
 }

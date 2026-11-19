@@ -41,7 +41,10 @@ include __DIR__ . '/includes/owner_start.php';
 
 <?php $rez = $_GET['rez'] ?? ''; ?>
 <?php if ($rez === 'ok'): ?>
-    <div class="alert alert-success py-2">Termin je uspešno zakazan.</div>
+    <div class="alert alert-success py-2">
+        Termin je uspešno zakazan.
+        <a href="moji_termini.php">Dodajte ga u Google Calendar</a>.
+    </div>
 <?php elseif ($rez === 'taken'): ?>
     <div class="alert alert-danger py-2">Taj termin je u međuvremenu zauzet. Izaberite drugi.</div>
 <?php elseif ($rez === 'invalid'): ?>

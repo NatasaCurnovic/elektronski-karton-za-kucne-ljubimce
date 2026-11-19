@@ -31,10 +31,10 @@ foreach ($svi as $t) {
 $nadolazeci = array_reverse($nadolazeci); // najbliži prvi
 
 $nazivStatusa = [
-    'SCHEDULED'          => 'Zakazan',
-    'COMPLETED'          => 'Završen',
-    'CANCELLED_BY_OWNER' => 'Otkazali ste',
-    'CANCELLED_BY_VETERINARIAN' => 'Otkazao veterinar',
+        'SCHEDULED'                 => 'Zakazan',
+        'COMPLETED'                 => 'Završen',
+        'CANCELLED_BY_OWNER'        => 'Otkazali ste',
+        'CANCELLED_BY_VETERINARIAN' => 'Otkazao veterinar',
 ];
 
 $aktivna = 'termini';
@@ -64,7 +64,15 @@ include __DIR__ . '/includes/owner_start.php';
             <small>dr <?= e($t['first_name'] . ' ' . $t['last_name']) ?> ·
                 <?= datum($t['start_time'], true) ?></small>
         </div>
-        <div>
+        <div class="d-flex gap-2 align-items-center flex-wrap">
+            <a href="<?= e(gcal_link(
+                    'Veterinar: ' . $t['pet_name'],
+                    $t['start_time'],
+                    $t['end_time'],
+                    'Pregled ljubimca ' . $t['pet_name'] . ' kod dr ' . $t['first_name'] . ' ' . $t['last_name']
+            )) ?>" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-calendar-plus"></i> Google Calendar
+            </a>
             <?php if (strtotime($t['start_time']) - time() >= 3600): ?>
                 <form method="post" class="m-0"
                       onsubmit="return confirm('Da li ste sigurni da želite da otkažete termin?');">

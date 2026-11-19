@@ -3,7 +3,7 @@ $stavke = [
     'pregled'   => ['Pregled',   'bi-grid',     'vet.php'],
     'pacijenti' => ['Pacijenti', 'bi-heart',    'pacijenti.php'],
     'termini'   => ['Termini',   'bi-calendar3', 'termini.php'],
-    'profil'    => ['Profil',    'bi-person',   null],
+    'profil'    => ['Profil',    'bi-person',   'profil.php'],
 ];
 ?>
 <div class="row g-0 owner-wrap">

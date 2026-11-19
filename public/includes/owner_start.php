@@ -6,9 +6,10 @@ $stavke = [
     'termini'     => ['Moji termini', 'bi-calendar-check', 'moji_termini.php'],
     'karton'      => ['E-karton',           'bi-file-earmark-medical', 'e_karton.php'],
     'ljubimci'    => ['Ljubimci',           'bi-heart',               'ljubimci.php'],
+    'qr'          => ['QR kodovi',          'bi-qr-code',             'qr.php'],
     'kalendar'    => ['Kalendar',           'bi-calendar3',           null],
-    'profil'      => ['Profil',             'bi-person',              null],
-    'podesavanja' => ['Podešavanja',        'bi-gear',                null],
+    'profil'      => ['Profil',             'bi-person',              'profil.php'],
+    'podesavanja' => ['Podešavanja',        'bi-gear',                'podesavanja.php'],
 ];
 ?>
 <div class="row g-0 owner-wrap">
